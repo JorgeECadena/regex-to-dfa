@@ -2,6 +2,9 @@
 #include <cctype>
 #include <unordered_set>
 
+#include "NFA.h"
+#include "Parser.h"
+
 /**
  * @brief Validates that alphabet is does not have any non-alphabetical
  * characters. If it does not have non-alphabetical characters returns
@@ -106,6 +109,8 @@ int main() {
 	std::string alphabet;
 	char regex[256];
 
+	NFA nfa;
+
 	std::cout << "\nAlphabet: ";
 	std::cin >> alphabet;
 
@@ -117,6 +122,12 @@ int main() {
 
 	if (!validateRegex(regex, alpha))
 		return 1;
+	
+	Parser parser(regex, nfa);
+	parser.parse();
+
+	std::cout << "\nNFA:\n";
+	nfa.print();
 
 	return 0;
 }
