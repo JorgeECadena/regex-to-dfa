@@ -24,12 +24,39 @@ bool State::operator==(const State& other) const {
 /**
  * @brief Creates a new instance of NFA
  * */
-NFA::NFA() : initialState(-1) {}
+NFA::NFA() : initialState(-1), finalState(-1) {}
 
 /**
  * @brief NFA class destructor
  * */
 NFA::~NFA() {}
+
+/**
+ * @brief Get an immutable reference to the class attribute 'states'
+ *
+ * @return const std::unordered_set<State>&
+ * */
+const std::unordered_set<State>& NFA::getStates() const {
+	return states;
+}
+
+/**
+ * @brief Get the value of the initial state
+ *
+ * @return int 
+ * */
+int NFA::getInitialState() {
+	return initialState;
+}
+
+/**
+ * @brief Get the value of the final state
+ *
+ * @return int
+ * */
+int NFA::getFinalState() {
+	return finalState;
+}
 
 /**
  * @brief Adds a new state into the NFA
@@ -59,7 +86,7 @@ bool NFA::addTransition(int from, char symbol, int to) {
 	// Make a copy state
 	State copyState = *it;
 	copyState.transitions[symbol].insert(to);
-	
+
 	// Replace old state with new one
 	states.erase(it);
 	states.insert(copyState);
@@ -77,12 +104,12 @@ void NFA::setInitialState(int id) {
 }
 
 /**
- * @brief Adds a final state for the NFA
+ * @brief Sets the final state attribute
  *
  * @param int id State id
  * */
-void NFA::addFinalState(int id) {
-	finalStates.insert(id);
+void NFA::setFinalState(int id) {
+	finalState = id;
 }
 
 /**
@@ -90,16 +117,14 @@ void NFA::addFinalState(int id) {
  * */
 void NFA::print() {
 	std::cout << "Initial State: " << initialState << std::endl;
-	std::cout << "Final States: ";
-	for (int state : finalStates)
-		std::cout << state << ", \n";
+	std::cout << "Final State: " << finalState << std::endl;
 	std::cout << "\nTransitions:\n";
 
 	for (const State& state : states) {
 		for (const std::pair<char, std::set<int>>& trans : state.transitions) {
 			for(int nextState : trans.second) {
 				std::cout << "State: " << state.id << " -- "
-					<< (trans.first ? trans.first : '#') << "-->"
+					<< (trans.first ? trans.first : '#') << " --> "
 					<< nextState << std::endl;
 			}
 		}

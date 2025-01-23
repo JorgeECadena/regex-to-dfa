@@ -30,14 +30,18 @@ class NFA {
 private:
 	std::unordered_set<State> states;
 	int initialState;
-	std::unordered_set<int> finalStates;
+	int finalState;
 public:
 	NFA();
 	~NFA();
 
+	const std::unordered_set<State>& getStates() const;
+	int getInitialState();
+	int getFinalState();
+
 	void addState(int id);
 	bool addTransition(int from, char symbol, int to);
 	void setInitialState(int id);
-	void addFinalState(int id);
+	void setFinalState(int id);
 	void print();
 };
